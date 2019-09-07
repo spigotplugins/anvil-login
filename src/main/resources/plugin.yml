@@ -1,0 +1,7 @@
+name: AnvilLogin
+version: ${project.version}
+main: io.github.portlek.anvillogin.AnvilLogin
+authors: [portlek]
+description: Login and register with anvil gui
+depend:
+  - AuthMe
