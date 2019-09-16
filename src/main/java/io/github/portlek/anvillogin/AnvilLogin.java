@@ -7,9 +7,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public final class AnvilLogin extends JavaPlugin implements Listener {
 
@@ -50,7 +49,7 @@ public final class AnvilLogin extends JavaPlugin implements Listener {
     }
 
     private void openRegister(Player p) {
-        new AnvilGUI.Builder()
+        AnvilGUI.Builder builder = new AnvilGUI.Builder()
             .onComplete((player, s) -> {
                 authmeApi.registerPlayer(player.getName(), s);
 
@@ -61,12 +60,13 @@ public final class AnvilLogin extends JavaPlugin implements Listener {
             })
             .preventClose()
             .text(insert)
-            .plugin(this)
-            .open(p);
+            .plugin(this);
+
+        getServer().getScheduler().runTask(this,() -> builder.open(p));
     }
 
     private void openLogin(Player p) {
-        new AnvilGUI.Builder()
+        AnvilGUI.Builder builder = new AnvilGUI.Builder()
             .onComplete((player, s) -> {
                 if (!authmeApi.checkPassword(player.getName(), s))
                     return AnvilGUI.Response.text(wrongPassword);
@@ -77,8 +77,9 @@ public final class AnvilLogin extends JavaPlugin implements Listener {
             })
             .preventClose()
             .text(insert)
-            .plugin(this)
-            .open(p);
+            .plugin(this);
+
+        getServer().getScheduler().runTask(this,() -> builder.open(p));
     }
 
     private String c(String text) {

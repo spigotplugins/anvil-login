@@ -40,7 +40,7 @@
                             <goal>shade</goal>
                         </goals>
                         <configuration>
-                            <outputFile>/home/portlek/Desktop/haronken/plugins/${project.name}.jar</outputFile>
+                            <outputFile>D:\sv\plugins\${project.name}.jar</outputFile>
                             <minimizeJar>true</minimizeJar>
                             <createDependencyReducedPom>false</createDependencyReducedPom>
                         </configuration>
@@ -73,9 +73,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>net.wesjd</groupId>
+            <groupId>com.github.WesJD.AnvilGUI</groupId>
             <artifactId>anvilgui</artifactId>
-            <version>1.2.3-SNAPSHOT</version>
+            <version>4b7a469d7e</version>
         </dependency>
         <dependency>
             <groupId>org.bukkit</groupId>
