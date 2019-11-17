@@ -29,8 +29,9 @@ public final class AnvilLogin extends JavaPlugin implements Listener {
         insert = c(getConfig().getString("insert"));
         wrongPassword = c(getConfig().getString("wrong-password"));
 
-        for (Player player : getServer().getOnlinePlayers())
+        for (Player player : getServer().getOnlinePlayers()) {
             ask(player);
+        }
 
         getServer().getPluginManager().registerEvents(this, this);
     }
@@ -41,10 +42,11 @@ public final class AnvilLogin extends JavaPlugin implements Listener {
     }
 
     private void ask(Player player) {
-        if (authmeApi.isRegistered(player.getName()))
+        if (authmeApi.isRegistered(player.getName())) {
             openLogin(player);
-        else
+        } else {
             openRegister(player);
+        }
     }
 
     private void openRegister(Player p) {
