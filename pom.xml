@@ -75,7 +75,7 @@
         <dependency>
             <groupId>com.github.WesJD.AnvilGUI</groupId>
             <artifactId>anvilgui</artifactId>
-            <version>4b7a469d7e</version>
+            <version>master-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.bukkit</groupId>
