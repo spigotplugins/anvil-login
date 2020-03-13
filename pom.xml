@@ -40,7 +40,6 @@
                             <goal>shade</goal>
                         </goals>
                         <configuration>
-                            <outputFile>D:\sv\plugins\${project.name}.jar</outputFile>
                             <minimizeJar>true</minimizeJar>
                             <createDependencyReducedPom>false</createDependencyReducedPom>
                         </configuration>
