@@ -19,72 +19,75 @@ public final class AnvilLogin extends JavaPlugin implements Listener {
 
     @Override
     public void onEnable() {
-        if (getServer().getPluginManager().getPlugin("AuthMe") == null)
+        if (this.getServer().getPluginManager().getPlugin("AuthMe") == null) {
             return;
-
-        authmeApi = AuthMeApi.getInstance();
-
-        saveDefaultConfig();
-
-        insert = c(getConfig().getString("insert"));
-        wrongPassword = c(getConfig().getString("wrong-password"));
-
-        for (Player player : getServer().getOnlinePlayers()) {
-            ask(player);
         }
 
-        getServer().getPluginManager().registerEvents(this, this);
+        this.authmeApi = AuthMeApi.getInstance();
+
+        this.saveDefaultConfig();
+
+        this.insert = this.c(this.getConfig().getString("insert"));
+        this.wrongPassword = this.c(this.getConfig().getString("wrong-password"));
+
+        for (final Player player : this.getServer().getOnlinePlayers()) {
+            this.ask(player);
+        }
+
+        this.getServer().getPluginManager().registerEvents(this, this);
+    }
+
+    private String c(final String text) {
+        return ChatColor.translateAlternateColorCodes('&', text);
+    }
+
+    private void ask(final Player player) {
+        if (this.authmeApi.isRegistered(player.getName())) {
+            this.openLogin(player);
+        } else {
+            this.openRegister(player);
+        }
+    }
+
+    private void openLogin(final Player p) {
+        final AnvilGUI.Builder builder = new AnvilGUI.Builder()
+            .onComplete((player, s) -> {
+                if (!this.authmeApi.checkPassword(player.getName(), s)) {
+                    return AnvilGUI.Response.text(this.wrongPassword);
+                }
+
+                this.authmeApi.forceLogin(player);
+
+                return AnvilGUI.Response.close();
+            })
+            .preventClose()
+            .text(this.insert)
+            .plugin(this);
+
+        this.getServer().getScheduler().runTask(this, () -> builder.open(p));
+    }
+
+    private void openRegister(final Player p) {
+        final AnvilGUI.Builder builder = new AnvilGUI.Builder()
+            .onComplete((player, s) -> {
+                this.authmeApi.registerPlayer(player.getName(), s);
+
+                if (!this.authmeApi.isAuthenticated(player)) {
+                    this.authmeApi.forceLogin(player);
+                }
+
+                return AnvilGUI.Response.close();
+            })
+            .preventClose()
+            .text(this.insert)
+            .plugin(this);
+
+        this.getServer().getScheduler().runTask(this, () -> builder.open(p));
     }
 
     @EventHandler
-    public void join(PlayerJoinEvent event) {
-        ask(event.getPlayer());
-    }
-
-    private void ask(Player player) {
-        if (authmeApi.isRegistered(player.getName())) {
-            openLogin(player);
-        } else {
-            openRegister(player);
-        }
-    }
-
-    private void openRegister(Player p) {
-        AnvilGUI.Builder builder = new AnvilGUI.Builder()
-            .onComplete((player, s) -> {
-                authmeApi.registerPlayer(player.getName(), s);
-
-                if (!authmeApi.isAuthenticated(player))
-                    authmeApi.forceLogin(player);
-
-                return AnvilGUI.Response.close();
-            })
-            .preventClose()
-            .text(insert)
-            .plugin(this);
-
-        getServer().getScheduler().runTask(this,() -> builder.open(p));
-    }
-
-    private void openLogin(Player p) {
-        AnvilGUI.Builder builder = new AnvilGUI.Builder()
-            .onComplete((player, s) -> {
-                if (!authmeApi.checkPassword(player.getName(), s))
-                    return AnvilGUI.Response.text(wrongPassword);
-
-                authmeApi.forceLogin(player);
-
-                return AnvilGUI.Response.close();
-            })
-            .preventClose()
-            .text(insert)
-            .plugin(this);
-
-        getServer().getScheduler().runTask(this,() -> builder.open(p));
-    }
-
-    private String c(String text) {
-        return ChatColor.translateAlternateColorCodes('&', text);
+    public void join(final PlayerJoinEvent event) {
+        this.ask(event.getPlayer());
     }
 
 }
