@@ -9,7 +9,7 @@
     <version>1.1</version>
     <packaging>jar</packaging>
 
-    <name>AnvilLogin</name>
+    <name>anvil-login</name>
 
     <description>Login and register with anvil gui</description>
     <properties>
@@ -32,7 +32,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.2.2</version>
+                <version>3.2.3</version>
                 <executions>
                     <execution>
                         <phase>package</phase>

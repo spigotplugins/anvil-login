@@ -22,19 +22,12 @@ public final class AnvilLogin extends JavaPlugin implements Listener {
         if (this.getServer().getPluginManager().getPlugin("AuthMe") == null) {
             return;
         }
-
         this.authmeApi = AuthMeApi.getInstance();
-
         this.saveDefaultConfig();
-
         this.insert = this.c(this.getConfig().getString("insert"));
         this.wrongPassword = this.c(this.getConfig().getString("wrong-password"));
-
-        for (final Player player : this.getServer().getOnlinePlayers()) {
-            this.ask(player);
-        }
-
         this.getServer().getPluginManager().registerEvents(this, this);
+        this.getServer().getOnlinePlayers().forEach(this::ask);
     }
 
     private String c(final String text) {
@@ -55,9 +48,7 @@ public final class AnvilLogin extends JavaPlugin implements Listener {
                 if (!this.authmeApi.checkPassword(player.getName(), s)) {
                     return AnvilGUI.Response.text(this.wrongPassword);
                 }
-
                 this.authmeApi.forceLogin(player);
-
                 return AnvilGUI.Response.close();
             })
             .preventClose()
@@ -71,11 +62,9 @@ public final class AnvilLogin extends JavaPlugin implements Listener {
         final AnvilGUI.Builder builder = new AnvilGUI.Builder()
             .onComplete((player, s) -> {
                 this.authmeApi.registerPlayer(player.getName(), s);
-
                 if (!this.authmeApi.isAuthenticated(player)) {
                     this.authmeApi.forceLogin(player);
                 }
-
                 return AnvilGUI.Response.close();
             })
             .preventClose()
