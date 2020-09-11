@@ -3,5 +3,6 @@ version: ${project.version}
 main: io.github.portlek.anvillogin.AnvilLogin
 authors: [portlek]
 description: Login and register with anvil gui
+api-version: 1.13
 depend:
   - AuthMe
